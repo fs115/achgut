@@ -3,19 +3,63 @@
 # Edge- und Nodelist zusammenführen
 library(igraph)
 library(igraphdata)
-el <- read.csv("ag.csv", header=TRUE)
-is.data.frame(el)
-el
-eli <- graph.data.frame(el, directed = TRUE)
-class(eli)
-eli
-plot(eli)
-el <- read.csv("ag.csv", header=T, as.is=T, sep = ",")
+
+ag <- read.csv("ag.csv", header=TRUE)
+is.data.frame(ag)
+ag
+
+agi <- graph.data.frame(ag, directed = TRUE)
+class(agi)
+agi
+
+plot(agi)
+
+ag <- read.csv("ag.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("nl.csv", header=T, as.is=T, sep = ",")
+
 # prüft, ob alle Variablen eingelesen wurden
 head(el)
 head(nodes)
+
 # wandelt die edgelist in eine Matrix um und baut das igraph-Objekt
-hties <-as.matrix(el)
+hties <-as.matrix(ag)
 ag <- graph_from_data_frame(d=hties, vertices=nodes, directed=T)
 ag
+
+# Übersicht über die Edge- und Vertex-Attribute
+summary(ag)
+edge_attr(ag)
+vertex_attr(ag)
+
+# der Standard-Plot unseres Netzwerks.
+plot(ag)
+
+# EDGE/KANTEN-Attribute festlegen
+
+E(ag)$arrow.size <- .2      # definiert die Pfeilspitze auf 2
+E(ag)$color="black"         # definiert die Kantenfarbe auf schwarz
+E(ag)$width <- E(ag)$weight # definiert die Kantenstärke nach dem hinterlegten Gewicht.
+E(ag)$color="red"           # setzt die Farbe rot für Kanten
+E(ag)$curved=.2             # leicht gebogenen Kanten für eine bessere Lesbarkeit.
+
+plot(ag, layout = layout_with_fr) # generiert den neuen Plot mit dem Layout nach Fruchterman-Rheingold. Fruchterman-Rheingold berechnet das Netzwerk jedes Mal neu.
+
+# VERTEX/KNOTEN-Attribute festlegen
+
+# Im Netzwerk sind männliche und weibliche Autoren abgelegt, die über das Vertex.Attribut $sex mit "1" (weiblich) oder "2" (männlich) kodiert sind. 
+Alle Männer (Autoren) sollen nun mit der Farbe blau und alle Frauen (Autorinnen) mit der Farbe rot visualisiert werden.
+
+#FARBEN nach Vertex-Attributen definieren
+colrs <- c("red", "blue")
+#definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector colrs fest. 
+Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+
+V(ag)$color <- colrs[V(ag)$sex]
+# weist dem Vertex-Attribut color die Funktion colrs zu, die wir vorher mit zwei Farben definiert haben.
+
+plot(ag)
+# Die Sortierung der Farben ist numerisch an die Reihenfolge des Attributs angelegt.
+
+
+
+
