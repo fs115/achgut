@@ -1,3 +1,6 @@
+# Edge- und Nodelist
+
+# Edge- und Nodelist zusammenführen
 library(igraph)
 library(igraphdata)
 el <- read.csv("ag.csv", header=TRUE)
