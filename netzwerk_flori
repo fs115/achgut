@@ -14,5 +14,5 @@ head(el)
 head(nodes)
 # wandelt die edgelist in eine Matrix um und baut das igraph-Objekt
 hties <-as.matrix(el)
-el <- graph_from_data_frame(d=hties, vertices=nodes, directed=T)
-el
+ag <- graph_from_data_frame(d=hties, vertices=nodes, directed=T)
+ag
