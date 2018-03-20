@@ -18,7 +18,7 @@ ag <- read.csv("ag.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("nl.csv", header=T, as.is=T, sep = ",")
 
 # prüft, ob alle Variablen eingelesen wurden
-head(el)
+head(ag)
 head(nodes)
 
 # wandelt die edgelist in eine Matrix um und baut das igraph-Objekt
@@ -59,6 +59,8 @@ V(ag)$color <- colrs[V(ag)$sex]
 
 plot(ag)
 # Die Sortierung der Farben ist numerisch an die Reihenfolge des Attributs angelegt.
+
+
 
 
 
