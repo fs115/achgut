@@ -60,7 +60,33 @@ V(ag)$color <- colrs[V(ag)$sex]
 plot(ag)
 # Die Sortierung der Farben ist numerisch an die Reihenfolge des Attributs angelegt.
 
+# Verschiedene Darstellung von Webseite und Autor, bi-partite
 
+V(ag)[V(ag)$type == 1]$shape <- "square"
+V(ag)[V(ag)$type == 0]$shape <- "circle"
+plot(ag)
+
+# Degree-Berechnung
+
+# indegree, aufsteigend sortiert
+
+degree(ag, mode = "in")
+c <- degree(ag, mode = "in")
+sort(c)
+
+# outdegree
+
+degree(ag, mode = "out")
+
+# Ego-Netzwerke der wichtigsten Webseiten, bemessen am jeweiligen Indegree-Wert:
+# achgut (127), faktum_magazin (48), politikxx (34), leserbriefe (23), bazonline (24), veralengsfeld (21)
+# Ohne News-Sammel-Seiten:
+# achgut (127), faktum_magazin (48), politikxx (34), bazonline (24), veralengsfeld (21), publicomag (19)
+
+# Darstellung der Ego-Netzwerke
+
+# Ego-Netzwerk achgut
+# Ego-Netzwerk 
 
 
 
