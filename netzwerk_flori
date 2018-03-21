@@ -66,27 +66,83 @@ V(ag)[V(ag)$type == 1]$shape <- "square"
 V(ag)[V(ag)$type == 0]$shape <- "circle"
 plot(ag)
 
-# Degree-Berechnung
+
+## Degree-Berechnung
 
 # indegree, aufsteigend sortiert
 
-degree(ag, mode = "in")
 c <- degree(ag, mode = "in")
 sort(c)
 
-# outdegree
 
-degree(ag, mode = "out")
-
-# Ego-Netzwerke der wichtigsten Webseiten, bemessen am jeweiligen Indegree-Wert:
+## Ego-Netzwerke der wichtigsten Webseiten, bemessen am jeweiligen Indegree-Wert:
 # achgut (127), faktum_magazin (48), politikxx (34), leserbriefe (23), bazonline (24), veralengsfeld (21)
 # Ohne News-Sammel-Seiten:
 # achgut (127), faktum_magazin (48), politikxx (34), bazonline (24), veralengsfeld (21), publicomag (19)
 
-# Darstellung der Ego-Netzwerke
+## Darstellung der Ego-Netzwerke
 
 # Ego-Netzwerk achgut
-# Ego-Netzwerk 
+
+vachgut <- subgraph <- make_ego_graph(ag, order=1, c("achgut"))
+plot(vachgut[[1]], edge.arrow.size=.1, vertex.color="lightblue", vertex.frame.color="white",  vertex.label.dist=1.5, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_fr)
+
+# Ego-Netzwerk faktum_magazin
+
+vfaktum_magazin <- subgraph <- make_ego_graph(ag, order=1, c("faktum_magazin"))
+plot(vfaktum_magazin[[1]], edge.arrow.size=.1, vertex.color="lightblue", vertex.frame.color="white",  vertex.label.dist=1.5, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_fr)
+
+# Ego-Netzwerk politikxx
+
+vpolitikxx <- subgraph <- make_ego_graph(ag, order=1, c("politikxx"))
+ind <- degree (ag, mode="out")
+plot(vpolitikxx[[1]], edge.arrow.size=.1, vertex.size=ind*3, vertex.color="lightblue", vertex.frame.color="white",  vertex.label.dist=1.5, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_fr)
+
+# Ego-Netzwerk leserbriefe
+
+vleserbriefe <- subgraph <- make_ego_graph(ag, order=1, c("leserbriefe"))
+plot(vleserbriefe[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk bazonline
+
+vbazonline <- subgraph <- make_ego_graph(ag, order=1, c("bazonline"))
+plot(vbazonline[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk veralengsfeld
+
+vveralengsfeld <- subgraph <- make_ego_graph(ag, order=1, c("veralengsfeld"))
+plot(vveralengsfeld[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk publicomag
+
+vpublicomag <- subgraph <- make_ego_graph(ag, order=1, c("publicomag"))
+plot(vpublicomag[[1]], edge.arrow.size=.1)
+
+
+## Netzwerke mit Qualitätsmedien
+
+vertex_attr(ag)
+ # Teilnetzwerk nur mit Autoren, die bei Qualitätsmedien publizierten (qualitätsmedium = 2)
+
+qualitaet <- delete_vertices(ag, V(ag)[qualitaetsmedium=="1"])
+plot(qualitaet, edge.arrow.size=.1, layout= layout_with_kk, main="Qualitätsmedien")
+vertex_attr(qualitaet)
+degree(qualitaet)
+V(qualitaet)$degreequalitaet = degree(qualitaet) 
+qualitaet2 <- delete_vertices(qualitaet, V(qualitaet)[degreequalitaet=="0"])
+vertex_attr(qualitaet2)
+ind <- degree(qualitaet2, mode="in")
+plot(qualitaet2, edge.arrow.size=.1, vertex.color="lightblue", vertex.frame.color="white",  vertex.label.dist=1.3, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_fr, main="Qualitätsmedien")
+# normalized = TRUE
+# vertex.size=ind*50,
+
+## Betweenness-Netzwerke
+
+# betweenness(ag) --> immer NULL!
+
+# Ego-Netzwerke der 5 wichtigsten Autoren
+# Identifikation hauptsächlicher Multiplikatoren (siehe Ego-Netzwerke?)
+# Netzwerke mit Farbverläufe zu page impressions und social media traffic
 
 
 
