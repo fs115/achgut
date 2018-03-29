@@ -25,62 +25,37 @@ head(nodes)
 hties <-as.matrix(ag)
 ag <- graph_from_data_frame(d=hties, vertices=nodes, directed=T)
 ag
-
-# Übersicht über die Edge- und Vertex-Attribute
-summary(ag)
-edge_attr(ag)
-vertex_attr(ag)
-
-# der Standard-Plot unseres Netzwerks.
 plot(ag)
 
-# EDGE/KANTEN-Attribute festlegen
+## Grundsätzliche Darstellung für alle:
 
-E(ag)$arrow.size <- .2      # definiert die Pfeilspitze auf 2
-E(ag)$color="black"         # definiert die Kantenfarbe auf schwarz
-E(ag)$width <- E(ag)$weight # definiert die Kantenstärke nach dem hinterlegten Gewicht.
-E(ag)$color="red"           # setzt die Farbe rot für Kanten
-E(ag)$curved=.2             # leicht gebogenen Kanten für eine bessere Lesbarkeit.
-
-plot(ag, layout = layout_with_fr) # generiert den neuen Plot mit dem Layout nach Fruchterman-Rheingold. Fruchterman-Rheingold berechnet das Netzwerk jedes Mal neu.
-
-# VERTEX/KNOTEN-Attribute festlegen
-
-# Im Netzwerk sind männliche und weibliche Autoren abgelegt, die über das Vertex.Attribut $sex mit "1" (weiblich) oder "2" (männlich) kodiert sind. 
-Alle Männer (Autoren) sollen nun mit der Farbe blau und alle Frauen (Autorinnen) mit der Farbe rot visualisiert werden.
-
-#FARBEN nach Vertex-Attributen definieren
-colrs <- c("red", "blue")
-#definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector colrs fest. 
-Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
-
-V(ag)$color <- colrs[V(ag)$sex]
-# weist dem Vertex-Attribut color die Funktion colrs zu, die wir vorher mit zwei Farben definiert haben.
-
-plot(ag)
-# Die Sortierung der Farben ist numerisch an die Reihenfolge des Attributs angelegt.
+E(ag)$curved=.2 
 
 # Verschiedene Darstellung von Webseite und Autor, bi-partite
 
 V(ag)[V(ag)$type == 1]$shape <- "square"
 V(ag)[V(ag)$type == 0]$shape <- "circle"
+V(ag)[V(ag)$type == 0]$color <- "lightblue"
+V(ag)[V(ag)$type == 1]$color <- "pink"
 plot(ag)
 
+####################### BIS HIER IMMER LADEN ########################
 
-## Degree-Berechnung
+####################### HIER BEGINNEN DIE VERSCHIEDENEN NETZWERKE ###########################
+
+#### Ego-Netzwerke der wichtigsten Webseiten, bemessen am jeweiligen Indegree-Wert:
+
+## Indegree-Berechnung
 
 # indegree, aufsteigend sortiert
 
 c <- degree(ag, mode = "in")
 sort(c)
-
-
-## Ego-Netzwerke der wichtigsten Webseiten, bemessen am jeweiligen Indegree-Wert:
 # achgut (127), faktum_magazin (48), politikxx (34), leserbriefe (23), bazonline (24), veralengsfeld (21)
 # Ohne News-Sammel-Seiten:
 # achgut (127), faktum_magazin (48), politikxx (34), bazonline (24), veralengsfeld (21), publicomag (19)
 
-## Darstellung der Ego-Netzwerke
+## Darstellung der Ego-Netzwerke der Webseiten
 
 # Ego-Netzwerk achgut
 
@@ -118,8 +93,41 @@ plot(vveralengsfeld[[1]], edge.arrow.size=.1)
 vpublicomag <- subgraph <- make_ego_graph(ag, order=1, c("publicomag"))
 plot(vpublicomag[[1]], edge.arrow.size=.1)
 
+#### Darstellung der 5 wichtigsten Ego-Netzwerke der Autoren (gemessen am Outdegree-Wert)
 
-## Netzwerke mit Qualitätsmedien
+## Outdegree-Berechnung
+
+# Outdegree, aufsteigend sortiert
+
+c <- degree(ag, mode = "out")
+sort(c)
+
+# Ergebnis:
+# peter grimm (129), henryk_m_broder (75), vera_lengsfeld (63), christian_ortner (50), dirk_maxeiner (34)
+
+# Ego-Netzwerk Peter Grimm
+vpeter_grimm <- subgraph <- make_ego_graph(ag, order=1, c("peter_grimm"))
+plot(vpeter_grimm[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk Henryk M. Broder
+vhenryk_m_broder <- subgraph <- make_ego_graph(ag, order=1, c("henryk_m_broder"))
+plot(vhenryk_m_broder[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk Vera Lengsfeld
+vvera_lengsfeld <- subgraph <- make_ego_graph(ag, order=1, c("vera_lengsfeld"))
+plot(vvera_lengsfeld[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk Christian Ortner
+vchristian_ortner <- subgraph <- make_ego_graph(ag, order=1, c("christian_ortner"))
+plot(vchristian_ortner[[1]], edge.arrow.size=.1)
+
+# Ego-Netzwerk Dirk Maxeiner
+vdirk_maxeiner <- subgraph <- make_ego_graph(ag, order=1, c("dirk_maxeiner"))
+plot(vdirk_maxeiner[[1]], edge.arrow.size=.1)
+
+
+
+#### Netzwerke mit Qualitätsmedien
 
 vertex_attr(ag)
  # Teilnetzwerk nur mit Autoren, die bei Qualitätsmedien publizierten (qualitätsmedium = 2)
