@@ -144,13 +144,35 @@ plot(qualitaet2, edge.arrow.size=.1, vertex.color="lightblue", vertex.frame.colo
 # normalized = TRUE
 # vertex.size=ind*50,
 
-## Betweenness-Netzwerke
+##### Zahlenmäßige Verteilung Links, Teaser und Volltext:
+
+E(ag)[relation == 3] # Selektion des Attributs, nicht ausfuehren
+
+# Teilnetzwerk nur mit Links
+
+ag_links <- subgraph.edges(ag, E(ag)[relation == 1])
+ag_links # 77 Knoten, 122 Kanten
+plot (ag_links)
+
+# Teilnetzwerk nur mit Volltexten
+
+ag_volltext <- subgraph.edges(ag, E(ag)[relation == 3]) 
+ag_volltext # 92 Knoten, 341 Kanten
+plot (ag_volltext, vertex.label = NA, edge.arrow.size = .1)
+
+# Teilnetzwerk nur mit Teasern
+
+ag_teaser <- subgraph.edges(ag, E(ag)[relation == 2]) 
+ag_teaser # 77 Knotwn, 234 Kanten
+plot (ag_teaser, vertex.label = NA, edge.arrow.size = .1)
+
+
+
+#### Betweenness-Netzwerke
 
 # betweenness(ag) --> immer NULL!
 
-# Ego-Netzwerke der 5 wichtigsten Autoren
-# Identifikation hauptsächlicher Multiplikatoren (siehe Ego-Netzwerke?)
-# Netzwerke mit Farbverläufe zu page impressions und social media traffic
+
 
 
 
