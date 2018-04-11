@@ -184,7 +184,13 @@ sort(cteaser)
 
 # betweenness(ag) --> immer NULL!
 
+### Dichte
+edge_density(ag)
+# ist 0,02237417
 
+### Durchmesser
+diameter(ag)
+# ist 1
 
 
 
