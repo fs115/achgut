@@ -2,7 +2,7 @@
 
 # Funktion read.csv
 
-ag <- read.csv("edgelist_neu.csv", header=TRUE) # liest die Datei ein
+ag <- read.csv("ag.csv", header=TRUE) # liest die Datei ein
 is.data.frame(ag) # prüft, ob ein is.data.frame vorliegt
 ag # zeigt den Datenframe an
 
@@ -21,8 +21,8 @@ library(igraph)
 
 getwd()
 # liest die Dateien direkt aus dem github-Verzeichnis ein
-ag <- read.csv("edgelist_neu.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("nodelist_verkuerzt.csv", header=T, as.is=T, sep = ",")
+ag <- read.csv("ag.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("nl.csv", header=T, as.is=T, sep = ",")
 # prüft, ob alle Variablen eingelesen wurden
 head(ag)
 head(nodes)
