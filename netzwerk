@@ -42,8 +42,8 @@ E(ag)$curved=.2
 
 V(ag)[V(ag)$type == 1]$shape <- "square"
 V(ag)[V(ag)$type == 0]$shape <- "circle"
-V(ag)[V(ag)$type == 0]$color <- "lightblue"
-V(ag)[V(ag)$type == 1]$color <- "pink"
+V(ag)[V(ag)$type == 0]$color <- "cornflowerblue"
+V(ag)[V(ag)$type == 1]$color <- "aquamarine2"
 outd <- degree(ag, mode="out")
 outd
 E(ag)$width <- outd*0.2
