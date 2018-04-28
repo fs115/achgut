@@ -49,6 +49,13 @@ outd
 E(ag)$width <- outd*0.2
 plot(ag)
 
+# Fake und Qualität Ego-Netzwerke
+E(ag)[relation == 3]$color <- "red"
+E(ag)[relation == 2]$color <- "orange"
+E(ag)[relation == 1]$color <- "yellow"
+V(ag)[qualitaetsmedium == 3]$color = "red"
+V(ag)[qualitaetsmedium == 1]$color = "green"
+
 ############################### BIS HIER IMMER LADEN ###################
 
 ####################### HIER BEGINNEN DIE VERSCHIEDENEN NETZWERKE ###########################
@@ -67,7 +74,7 @@ sort(c)
 # Ohne News-Sammel-Seiten:
 # achgut (127), faktum_magazin (48), politikxx (34), bazonline (24), veralengsfeld (21), publicomag (19)
 
-## Darstellung der Ego-Netzwerke der Webseiten
+## Darstellung der Ego-Netzwerke der Webseiten mit Lieblings-Effekt
 
 # Ego-Netzwerk achgut
 vachgut <- subgraph <- make_ego_graph(ag, order=1, c("achgut"))
@@ -76,13 +83,13 @@ outd
 vachgut
 plot(vachgut[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'achgut.com'")
 
-# Ego-Netzwerk faktum_magazin
+# Ego-Netzwerk faktum_magazin (viele Teaser, Lieblinge)
 
 vfaktum_magazin <- subgraph <- make_ego_graph(ag, order=1, c("faktum_magazin"))
 outd <- degree (ag, mode="out")
 plot(vfaktum_magazin[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'faktum-magazin.de'")
 
-# Ego-Netzwerk politikxx
+# Ego-Netzwerk politikxx (viele Teaser und Links, Lieblinge)
 
 vpolitikxx <- subgraph <- make_ego_graph(ag, order=1, c("politikxx"))
 ind <- degree (ag, mode="in")
@@ -98,15 +105,30 @@ plot(vleserbriefe[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.co
 vbazonline <- subgraph <- make_ego_graph(ag, order=1, c("bazonline"))
 plot(vbazonline[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'bazonline.ch'")
 
-# Ego-Netzwerk veralengsfeld
+# Ego-Netzwerk veralengsfeld (nur auf eigene Seite, Volltexte)
 
 vveralengsfeld <- subgraph <- make_ego_graph(ag, order=1, c("veralengsfeld"))
 plot(vveralengsfeld[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'vera-lengsfeld.de'")
 
-# Ego-Netzwerk publicomag
+# Ego-Netzwerk publicomag (nur Volltexte und Liebling)
 
 vpublicomag <- subgraph <- make_ego_graph(ag, order=1, c("publicomag"))
 plot(vpublicomag[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'publicomag.com'")
+
+# Ego-Netzwerk newstral (nur Links, News-Sammel-Seite)
+
+vnewstral <- subgraph <- make_ego_graph(ag, order=1, c("newstral"))
+plot(vnewstral[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'newstral'")
+
+# Ego-Netzwerk welt (nur Volltexte)
+
+vwelt <- subgraph <- make_ego_graph(ag, order=1, c("welt"))
+plot(vwelt[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'welt.de'")
+
+# Ego-Netzwerk the european (nur Volltexte)
+
+vtheeuropean <- subgraph <- make_ego_graph(ag, order=1, c("theeuropean"))
+plot(vtheeuropean[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'theeuropean'")
 
 ## Darstellung der 5 wichtigsten Ego-Netzwerke der Autoren (gemessen am Outdegree-Wert)
 
@@ -120,35 +142,31 @@ sort(c)
 # Ergebnis:
 # peter grimm (129), henryk_m_broder (75), vera_lengsfeld (63), christian_ortner (50), dirk_maxeiner (34)
 
-# Ego-Netzwerk Peter Grimm
+# Ego-Netzwerk Peter Grimm (sehr aktiv, viele Seiten, einige stechen hervor)
 vpeter_grimm <- subgraph <- make_ego_graph(ag, order=1, c("peter_grimm"))
-plot(vpeter_grimm[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Peter Grimm")
+plot(vpeter_grimm[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.7, layout = layout_with_kk, main="Ego-Netzwerk Peter Grimm")
 
-# Ego-Netzwerk Henryk M. Broder
+# Ego-Netzwerk Henryk M. Broder (wie oben, noch deutlicher)
 vhenryk_m_broder <- subgraph <- make_ego_graph(ag, order=1, c("henryk_m_broder"))
-plot(vhenryk_m_broder[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Henryk M. Broder")
+plot(vhenryk_m_broder[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.8, layout = layout_with_kk, main="Ego-Netzwerk Henryk M. Broder")
 
-# Ego-Netzwerk Vera Lengsfeld
+# Ego-Netzwerk Vera Lengsfeld (SPANNEND, Fake-News-Cluster)
 vvera_lengsfeld <- subgraph <- make_ego_graph(ag, order=1, c("vera_lengsfeld"))
-plot(vvera_lengsfeld[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Vera Lengsfeld")
+plot(vvera_lengsfeld[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.8, layout = layout_with_kk, main="Ego-Netzwerk Vera Lengsfeld")
 
-# Ego-Netzwerk Christian Ortner
-vchristian_ortner <- subgraph <- make_ego_graph(ag, order=1, c("christian_ortner"))
-plot(vchristian_ortner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Christian Ortner")
-
-# Ego-Netzwerk Dirk Maxeiner
+# Ego-Netzwerk Dirk Maxeiner (nicht so spannend)
 vdirk_maxeiner <- subgraph <- make_ego_graph(ag, order=1, c("dirk_maxeiner"))
-plot(vdirk_maxeiner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
+plot(vdirk_maxeiner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.8, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
 
-# Fake und Qualität Ego-Netzwerke
+## Fake und Qualität Ego-Netzwerke
 
-# Ego-Netzwerk Alexander Wendt
-valexander_wendt <- subgraph <- make_ego_graph(ag, order=1, c("alexander_wendt"))
-plot(valexander_wendt[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
-
-# Ego-Netzwerk Christian Ortner
+# Ego-Netzwerk Christian Ortner (hat Fake und Qualität!!)
 vchristian_ortner <- subgraph <- make_ego_graph(ag, order=1, c("christian_ortner"))
-plot(vchristian_ortner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
+plot(vchristian_ortner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.8, layout = layout_with_kk, main="Ego-Netzwerk Christian Ortner")
+
+# Ego-Netzwerk Alexander Wendt (hat Fake und Qualität!!)
+valexander_wendt <- subgraph <- make_ego_graph(ag, order=1, c("alexander_wendt"))
+plot(valexander_wendt[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.8, layout = layout_with_kk, main="Ego-Netzwerk Alexander Wendt")
 
 
 ## Netzwerke mit Qualitätsmedien
@@ -171,7 +189,7 @@ ind <- degree(qualitaet2, mode="in")
 plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Qualitätsmedien")
 qualitaet <- V(qualitaet2)[V(qualitaet2)$qualitaetsmedium == "1"]
 V(qualitaet2)[qualitaet]$color = "green"
-plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Fake-News-Seiten")
+plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Qualitätsmedien")
 
 # Teilnetzwerk nur mit Autoren, die auf Fake-News-Seiten auftauchen
 
@@ -194,7 +212,6 @@ plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dis
 
 # gleichzeitige Darstellung von Qualität und Fake News nebeneinander
 
-# par(mfrow=c(1,2), mar=c(0,0,2,2))
 plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Fake-News-Seiten")
 plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Qualitätsmedien")
 
