@@ -140,21 +140,81 @@ plot(vchristian_ortner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.fra
 vdirk_maxeiner <- subgraph <- make_ego_graph(ag, order=1, c("dirk_maxeiner"))
 plot(vdirk_maxeiner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
 
+# Fake und Qualität Ego-Netzwerke
+
+# Ego-Netzwerk Alexander Wendt
+valexander_wendt <- subgraph <- make_ego_graph(ag, order=1, c("alexander_wendt"))
+plot(valexander_wendt[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
+
+# Ego-Netzwerk Christian Ortner
+vchristian_ortner <- subgraph <- make_ego_graph(ag, order=1, c("christian_ortner"))
+plot(vchristian_ortner[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Arial", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk Dirk Maxeiner")
+
+
 ## Netzwerke mit Qualitätsmedien
 
 vertex_attr(ag)
- # Teilnetzwerk nur mit Autoren, die bei Qualitätsmedien publizierten (qualitätsmedium = 2)
+# Teilnetzwerk nur mit Autoren, die bei Qualitätsmedien publizierten (qualitätsmedium = 1)
 
-qualitaet <- delete_vertices(ag, V(ag)[qualitaetsmedium=="1"])
-plot(qualitaet, edge.arrow.size=.1, layout= layout_with_kk, main="Qualitätsmedien")
-vertex_attr(qualitaet)
-degree(qualitaet)
-V(qualitaet)$degreequalitaet = degree(qualitaet) 
-qualitaet2 <- delete_vertices(qualitaet, V(qualitaet)[degreequalitaet=="0"])
+qualitaet_mit_fake <- delete_vertices(ag, V(ag)[qualitaetsmedium=="2"])
+qualitaet_mit_fake
+plot(qualitaet_mit_fake)
+qualitaet_ohne_fake <- delete_vertices(qualitaet_mit_fake, V(qualitaet_mit_fake)[qualitaetsmedium=="3"])
+qualitaet_ohne_fake
+plot(qualitaet_ohne_fake)
+vertex_attr(qualitaet_ohne_fake)
+degree(qualitaet_ohne_fake)
+V(qualitaet_ohne_fake)$degreequalitaet = degree(qualitaet_ohne_fake) 
+qualitaet2 <- delete_vertices(qualitaet_ohne_fake, V(qualitaet_ohne_fake)[degreequalitaet=="0"])
 vertex_attr(qualitaet2)
 ind <- degree(qualitaet2, mode="in")
 plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Qualitätsmedien")
-# normalized = TRUE
+qualitaet <- V(qualitaet2)[V(qualitaet2)$qualitaetsmedium == "1"]
+V(qualitaet2)[qualitaet]$color = "green"
+plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Fake-News-Seiten")
+
+# Teilnetzwerk nur mit Autoren, die auf Fake-News-Seiten auftauchen
+
+qualitaet_mit_fake <- delete_vertices(ag, V(ag)[qualitaetsmedium=="2"])
+qualitaet_mit_fake
+plot(qualitaet_mit_fake)
+nur_fake <- delete_vertices(qualitaet_mit_fake, V(qualitaet_mit_fake)[qualitaetsmedium=="1"])
+nur_fake
+plot(nur_fake)
+vertex_attr(nur_fake)
+degree(nur_fake)
+V(nur_fake)$degreequalitaet = degree(nur_fake) 
+fakenews <- delete_vertices(nur_fake, V(nur_fake)[degreequalitaet=="0"])
+vertex_attr(fakenews)
+ind <- degree(fakenews, mode="in")
+plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Fake-News-Seiten")
+fake <- V(fakenews)[V(fakenews)$qualitaetsmedium == "3"]
+V(fakenews)[fake]$color = "red"
+plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Fake-News-Seiten")
+
+# gleichzeitige Darstellung von Qualität und Fake News nebeneinander
+
+# par(mfrow=c(1,2), mar=c(0,0,2,2))
+plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Fake-News-Seiten")
+plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Qualitätsmedien")
+
+# Darstellung beider Netzwerke gemeinsam mit Verbindungen und verschiedenen Farben
+
+qualitaet_und_fake <- delete_vertices(ag, V(ag)[qualitaetsmedium=="2"])
+qualitaet_und_fake
+plot(qualitaet_und_fake)
+degree(qualitaet_und_fake)
+V(qualitaet_und_fake)$degreequalitaet = degree(qualitaet_und_fake) 
+qualitaet_und_fake2 <- delete_vertices(qualitaet_und_fake, V(qualitaet_und_fake)[degreequalitaet=="0"])
+vertex_attr(qualitaet_und_fake2)
+ind <- degree(qualitaet_und_fake2, mode="in")
+plot(qualitaet_und_fake2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_fr, main="Qualität und Fake")
+fake <- V(qualitaet_und_fake2)[V(qualitaet_und_fake2)$qualitaetsmedium == "3"]
+V(qualitaet_und_fake2)[fake]$color = "red"
+qualitaet <- V(qualitaet_und_fake2)[V(qualitaet_und_fake2)$qualitaetsmedium == "1"]
+V(qualitaet_und_fake2)[qualitaet]$color = "green"
+plot(qualitaet_und_fake2, rescale=TRUE, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Arial", layout = layout_with_kk, main="Qualität und Fake")
+
 
 # Zahlenmäßige Verteilung Links, Teaser und Volltext:
 
@@ -187,18 +247,42 @@ cteaser <- degree(ag_teaser, mode="in")
 sort(cteaser)
 # meiste Verlinkungen: faktum_magazin (44), politikxx (31), leserbriefe (22), news_feed_reader (20), haolam_info (14)
 
-#### Betweenness-Netzwerke
+### Netzwerk- und Akteursmaße
 
-# betweenness(ag) --> immer NULL!
+# Betweenness-Netzwerke
 
-### Dichte
+edge_betweenness(ag)
+betweeness1 <- edge_betweenness(ag)
+betweeness1
+sort(betweeness1)
+plot(betweeness1)
+
+#Zentralisierter Degree-Wert (Verteilung aller Degrees im Netzwerk in Prozent, 35 Prozent realisiert)
+centr_degree(ag)$centralization
+# ist 0.3460582
+
+#Zentralisierter Closeness-Wert (wie dicht die Knoten zusammenstehen)
+centr_clo(ag, mode = "all")$centralization
+# ist 0.05483674
+
+#Zentralisierter Betweenness-Wert
+centr_betw(ag, directed = FALSE)$centralization
+
+# Dichte
 edge_density(ag)
 # ist 0,02237417
 
-### Durchmesser
+# Durchmesser
 diameter(ag)
 # ist 1
 
+# groesste Cliquen
+largest.cliques(ag, 5)
+maximal.cliques.count(ag)
 
+# Cluster im Netzwerk
 
-
+gc <- cluster_walktrap(ag)
+modularity(gc)
+membership(gc)
+plot(gc, ag, edge.arrow.size=0.1)
