@@ -1,0 +1,42 @@
+# Visualisierung mit VisNetwork
+# 2018-04-30 | sandhu@hdm-stuttgart.de
+
+# VisNetwork ist ein Paket, das es uns ermöglicht, Visualisierungen für Websites zu erstellen. Wir haben ausserdem einfachere Möglichkeiten für dynamische Websites. Mehr Info unter http://datastorm-open.github.io/visNetwork/
+
+# Wir erstellen das studentische Hilfsnetzwerk von Grund auf:
+library(igraph)
+edges <- read.csv("https://raw.githubusercontent.com/fs115/achgut/master/ag.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/fs115/achgut/master/nl.csv", header=T, as.is=T, sep = ",")
+hties <-as.matrix(edges)
+ag <- graph_from_data_frame(d=hties, vertices=nodes, directed=T)
+class(ag)
+ag
+plot(ag)
+
+# Wir legen jetzt Visualisierungsparameter fest
+
+# Kantenattribute
+E(ag)$arrow.size <- .2
+E(ag)$color="darkgrey"
+E(ag)$width <- E(h)$weight/2 # legt das Kantengewicht fest
+E(ag)$curved=.3
+
+# Mit dem Netzwerk sind wir soweit zufrieden. Nur könnte die Darstellung etwas schöner sein. Hier kommt jetzt VisNetwork ins Spiel. VisNetwork ist ein Zusatzpaket, mit dem man leichter Visualisierungen umsetzen und v.a. für das Web als dynamische HTML-Seite exportieren kann. Es basiert auf einer JavaScript Bibliothek.
+
+library(visNetwork)
+?visNetwork
+
+# Mit dem Befehl visIgraph() lassen sich bereits vorhandenen igraph-Objekte visualisieren. Mehr Info hier: http://datastorm-open.github.io/visNetwork/
+
+visIgraph(ag, layout = "layout_with_kk" )
+# oder auch:
+visIgraph(ag, layout = "layout_in_circle")
+visIgraph(ag, layout = "layout_with_fr")
+visIgraph(ag, layout = "layout_nicely")
+
+# Ein Nachteil ist, dass sich die Kanten nicht mehr krümmen lassen, aber dafür ist die Aufteilung der Knoten in der Regel deutlich besser.
+
+# Beispielsweise lassen sich so für das Web einfache Navigationsbuttons anlegen:
+visIgraph(ag, layout = "layout_with_kk") %>%
+  visInteraction(navigationButtons = TRUE)
+
