@@ -70,12 +70,13 @@ V(ag)[qualitaetsmedium == 1]$color = "green"
 c <- degree(ag, mode = "in")
 sort(c)
 
+
 #Ergebnis:
 # achgut (127), faktum_magazin (48), politikxx (34), leserbriefe (23), bazonline (24), veralengsfeld (21)
 # Ohne News-Sammel-Seiten:
 # achgut (127), faktum_magazin (48), politikxx (34), bazonline (24), veralengsfeld (21), publicomag (19)
 
-###### Darstellung der Ego-Netzwerke der Webseiten mit Lieblings-Effekt
+## Darstellung der Ego-Netzwerke der Webseiten mit Lieblings-Effekt
 
 # Ego-Netzwerk achgut
 vachgut <- subgraph <- make_ego_graph(ag, order=1, c("achgut"))
@@ -131,7 +132,7 @@ plot(vwelt[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="wh
 vtheeuropean <- subgraph <- make_ego_graph(ag, order=1, c("theeuropean"))
 plot(vtheeuropean[[1]], edge.arrow.size=.1, edge.label.degree=0, vertex.frame.color="white", vertex.label.family="Helvetica", vertex.label.dist=0.5, vertex.label.cex=.6, layout = layout_with_kk, main="Ego-Netzwerk 'theeuropean'")
 
-##### Darstellung der 5 wichtigsten Ego-Netzwerke der Autoren (gemessen am Outdegree-Wert)
+## Darstellung der 5 wichtigsten Ego-Netzwerke der Autoren (gemessen am Outdegree-Wert)
 
 ## Outdegree-Berechnung
 
@@ -190,7 +191,8 @@ ind <- degree(qualitaet2, mode="in")
 plot(qualitaet2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.cex=.7, vertex.label.family="Helvetica", layout = layout_with_fr, main="Qualitätsmedien")
 qualitaet <- V(qualitaet2)[V(qualitaet2)$qualitaetsmedium == "1"]
 V(qualitaet2)[qualitaet]$color = "green"
-plot(qualitaet2, edge.arrow.size=.01, rescale = TRUE, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Helvetica", layout = layout_with_kk, main="Qualitätsmedien")
+V(qualitaet2)$size <- 11
+plot(qualitaet2, edge.arrow.size=.01, rescale = TRUE, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_kk, main="Qualitätsmedien")
 
 # Teilnetzwerk nur mit Autoren, die auf Fake-News-Seiten auftauchen
 
@@ -209,7 +211,13 @@ ind <- degree(fakenews, mode="in")
 plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Helvetica", layout = layout_with_fr, main="Fake-News-Seiten")
 fake <- V(fakenews)[V(fakenews)$qualitaetsmedium == "3"]
 V(fakenews)[fake]$color = "red"
-plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Helvetica", layout = layout_with_kk, main="Fake-News-Seiten")
+V(fakenews)$size <- 11
+plot(fakenews, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.dist=1, vertex.label.size=10, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_kk, main="Fake-News-Seiten")
+
+# Visualisierung mit visIgrahp
+V(fakenews)$size <- 10
+
+visIgraph(fakenews)
 
 # gleichzeitige Darstellung von Qualität und Fake News nebeneinander
 
@@ -231,10 +239,11 @@ fake <- V(qualitaet_und_fake2)[V(qualitaet_und_fake2)$qualitaetsmedium == "3"]
 V(qualitaet_und_fake2)[fake]$color = "red"
 qualitaet <- V(qualitaet_und_fake2)[V(qualitaet_und_fake2)$qualitaetsmedium == "1"]
 V(qualitaet_und_fake2)[qualitaet]$color = "green"
-plot(qualitaet_und_fake2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.degree=80, vevertex.label.dist=0.3, vertex.label.size=10, vertex.label.cex=.7, vertex.label.family="Helvetica", layout = layout_with_kk, main="Qualität und Fake")
+V(qualitaet_und_fake2)$size <- 11
+plot(qualitaet_und_fake2, edge.arrow.size=.01, vertex.frame.color="white", vertex.label.degree=80, vevertex.label.dist=0.3, vertex.label.size=10, vertex.label.cex=.8, vertex.label.family="Helvetica", layout = layout_with_kk, main="Qualität und Fake")
 
 
-#### Zahlenmäßige Verteilung Links, Teaser und Volltext:
+# Zahlenmäßige Verteilung Links, Teaser und Volltext:
 
 E(ag)[relation == 3] # Selektion des Attributs, nicht ausfuehren
 
@@ -265,7 +274,7 @@ cteaser <- degree(ag_teaser, mode="in")
 sort(cteaser)
 # meiste Verlinkungen: faktum_magazin (44), politikxx (31), leserbriefe (22), news_feed_reader (20), haolam_info (14)
 
-####### Netzwerk- und Akteursmaße ########
+### Netzwerk- und Akteursmaße
 
 # Pfaddistanz
 mean_distance(ag, directed = FALSE)
@@ -300,3 +309,17 @@ centr_betw(ag, directed = FALSE)$centralization
 # Dichte
 edge_density(ag)
 # ist 0,02237417
+
+
+
+##################### müll ###################
+# groesste Cliquen
+largest.cliques(ag)
+maximal.cliques.count(ag)
+
+# Cluster im Netzwerk
+
+gc <- cluster_walktrap(ag)
+modularity(ag)
+membership(ag)
+plot(ag, edge.arrow.size=0.1)
